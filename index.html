@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title></title>
+    <title>纯CSS,HTML实现轮播.</title>
     <style>
         /* Slider wrapper*/
         .css-slider-wrapper {
@@ -206,6 +206,226 @@
             }
         }
     </style>
+    <script src="cartoon-avatar/materials/mouth.js"></script>
+    <script src="cartoon-avatar/materials/accessories.js"></script>
+    <script src="cartoon-avatar/materials/clothes.js"></script>
+    <script src="cartoon-avatar/materials/eyebrows.js"></script>
+    <script src="cartoon-avatar/materials/eyes.js"></script>
+    <script src="cartoon-avatar/materials/hair.js"></script>
+    <script src="cartoon-avatar/materials/shirt.js"></script>
+    <script src="cartoon-avatar/materials/top.js"></script>
+    <script>
+        "use strict";
+        const materials = {//卡通图svg元素
+            mouthType: window.mouthTypes, //嘴巴
+            eyeType: window.eyeTypes, //眼睛
+            topType: window.topTypes, //卡通图整体
+            clothesType: window.clothesType, //衣服
+            eyebrowType: window.eyebrowTypes, //眉毛
+            facialHairType: window.facialHairTypes, //胡须
+            accessoriesType: window.accessoriesTypes, //眼镜
+            graphicShirtType: window.GraphicShirtTypes, //图案衬衫
+            hatColor: { //帽子颜色
+                Black: "#262E33",
+                Blue01: "#65C9FF",
+                Blue02: "#5199E4",
+                Blue03: "#25557C",
+                Gray01: "#E6E6E6",
+                Gray02: "#929598",
+                Heather: "#3C4F5C",
+                PastelBlue: "#B1E2FF",
+                PastelGreen: "#A7FFC4",
+                PastelOrange: "#FFDEB5",
+                PastelRed: "#FFAFB9",
+                PastelYellow: "#cece16",
+                Pink: "#FF488E",
+                Red: "#FF5C5C",
+                White: "#d61717"
+            },
+            shirtColor: { //T恤衫颜色
+                Black: "#262E33",
+                Blue01: "#65C9FF",
+                Blue02: "#5199E4",
+                Blue03: "#25557C",
+                Gray01: "#E6E6E6",
+                Gray02: "#929598",
+                Heather: "#3C4F5C",
+                PastelBlue: "#B1E2FF",
+                PastelGreen: "#A7FFC4",
+                PastelOrange: "#FFDEB5",
+                PastelRed: "#FFAFB9",
+                PastelYellow: "#cece16",
+                Pink: "#FF488E",
+                Red: "#FF5C5C",
+                White: "#d61717"
+            },
+            hairColor: { //头发颜色
+                Auburn: "#A55728",
+                Black: "#2C1B18",
+                Blonde: "#B58143",
+                BlondeGolden: "#D6B370",
+                Brown: "#724133",
+                BrownDark: "#4A312C",
+                PastelPink: "#F59797",
+                Platinum: "#ECDCBF",
+                Red: "#C93305",
+                SilverGray: "#E8E1E1"
+            },
+            facialHairColor: { //胡须颜色
+                Auburn: "#A55728",
+                Black: "#2C1B18",
+                Blonde: "#B58143",
+                BlondeGolden: "#D6B370",
+                Brown: "#724133",
+                BrownDark: "#4A312C",
+                PastelPink: "#F59797",
+                Platinum: "#ECDCBF",
+                Red: "#C93305",
+                SilverGray: "#E8E1E1"
+            },
+            skinColor: { //皮肤颜色
+                Tanned: "#FD9841",
+                Yellow: "#F8D25C",
+                Pale: "#FFDBB4",
+                Light: "#EDB98A",
+                Brown: "#D08B5B",
+                DarkBrown: "#AE5D29",
+                Black: "#614335"
+            }
+        }
+        const options = [];
+        for (const optionName in materials) {
+            //准备一个对象,存储数据,一个svg元素对象,对应大量的属性.
+            let option = {
+                name: optionName,
+                values: []
+            };
+            const optionValues = materials[optionName];
+            for (const optionValueKey in optionValues) {
+                //检查对象是否有属性.
+                if (optionValues.hasOwnProperty(optionValueKey)) {
+                    option.values.push(optionValues[optionValueKey]);
+                }
+            }
+            options.push(option);
+        }
+
+        //生成13个svg元素对象.
+        function svgGenerate(uuid) {
+            let option = {};
+            let hash = uuid;
+            //console.log(hash)
+            // 循环13个svg元素,随机生成每一个部分.
+            options.forEach(element => {
+                //每8位截取一次,生成一次元素.
+                let num = parseInt(hash.substring(0, 8), 16);
+                //console.log(hash.substring(0, 8))
+                //将16进制的4位数转成10进制的数字,用得到的num对元素的数量进行取余.
+                let valueIndex = num % element.values.length;
+                option[element.name] = element.values[valueIndex];
+                hash = hash.substring(8);
+            });
+            //用13个svg元素,加上svg模板,生成一张卡通图像.
+            return svgTemplate(option);
+        }
+
+        //生成一个长度等于4位的code.
+        function S4() {
+            // (1 + Math.random()) 结果是1点几数值,1点几*0x10000结果就是一个五位整数加小数的数值,
+            // 再|0就是取整数,
+            // 到这里就得到一个五位数数值了,再toString(16)就是换成五位数字符串,
+            // 再substring(1)就是从第2个位置开始截取，最后就得到一个四位数的随机字符串.
+            return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+        }
+
+        //生成一个长度4*26的code.(一个svg元素使用8位,13个元素),只要足够随机即可,这个随机算法比较差,测试用即可.
+        function guid() {
+            //生成4*26位16进制字符串.
+            return (
+                S4() + S4() + S4() + S4() + S4() + S4() + S4() + S4() + S4()
+                + S4() + S4() + S4() + S4() + S4() + S4() + S4() + S4() + S4()
+                + S4() + S4() + S4() + S4() + S4() + S4() + S4() + S4());
+        }
+
+        function clearSvg() {
+            let main = document.getElementById("main");
+            main.innerHTML = "";
+        }
+
+        //卡通图svg模板.
+        function svgTemplate(option) {
+            return `
+        <svg width="120" height="120" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="--avataaar-hair-color:${option.hairColor}; --avataaar-facial-hair-color:${option.facialHairColor}; --avataaar-hat-color:${option.hatColor}; --avataaar-shirt-color:${option.shirtColor};">
+            <defs>
+                <!-- 背景圆形,半径的大小可以调整.与 stroke-width 配合使用.-->
+                <circle id="path-1" cx="120" cy="120" r="125"></circle>
+                <!-- 遮罩,主要是为了圆形背景使用,但是使用裁剪不太好使,需要进一步看看 -->
+                <path d="M12,160 C12,226 65,280 132,280 C198,280 252,226 252,160 L264,160 L264,-1 L-3,-1 L-3,160 L12,160 Z" id="path-3"></path>
+                <!-- 整个图像的轮廓. -->
+                <path d="M124,144 L124,163 L128,163 L128,163 C167,163 200,195 200,235 L200,244 L0,244 L0,235 C-4,195 32,163 72,163 L72,163 L76,163 L76,144 C58,136 46,119 44,99 C38,99 34,94 34,88 L34,74 C34,68 38,63 44,62 L44,56 L44,56 C44,25 69,5 100,0 L100,0 L100,0 C130,-5 156,25 156,56 L156,62 C161,63 166,68 166,74 L166,88 C166,94 161,99 155,99 C153,119 141,136 124,144 Z" id="path-silhouette"></path>
+            </defs>
+            <g id="Avataaar" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g transform="translate(-825, -1100)" id="Avataaar/Circle">
+            <g transform="translate(825, 1100)">
+                <!-- 方形的框.height="245" 需要随时调整. -->
+                <!--
+                <g id="Square" transform="translate(12, 40)">
+                <g id="Color/Palette/Blue-01" mask="url(#mask-2)" fill="#65C9FF">
+                    <rect id="🖍Color" x="0" y="0" width="240" height="245" stroke="red" fill="#e1e89d" stroke-width="10" stroke-opacity="0.6" fill-opacity="0.6"></rect>
+                </g>
+                </g>
+                <g id="Avataaar" stroke-width="1" fill-rule="evenodd" fill="black">
+                -->
+                <!-- 圆形的框. -->
+
+                <g id="Circle" transform="translate(12, 40)">
+                    <use id="Circle-Background" stroke="red" fill="#e1e89d" stroke-width="10" stroke-opacity="0.6" fill-opacity="0.6"  xlink:href="#path-1" ></use>
+                </g>
+                    <mask id="mask-4" fill="white"><use xlink:href="#path-3"></use></mask>
+                <g id="Avataaar" fill="black" mask="url(#mask-4)">
+                
+                <!-- stroke-width="1" fill-rule="evenodd"-->
+                <!-- 身体部分 -->
+                <g id="Body" transform="translate(32, 36)">
+                    <!-- 使用轮廓,遮罩脖子和下巴连接处增加一点阴影. -->
+                    <mask id="mask-silhouette" fill="white"><use xlink:href="#path-silhouette"></use></mask>
+                    <!-- 复制轮廓,更改皮肤颜色. -->
+                    <use fill="${option.skinColor}" xlink:href="#path-silhouette"></use>
+                    <!-- 脖子和下巴连接处增加一点阴影. -->
+                    <path d="M156,79 L156,102 C156,132 130,158 100,158 C69,158 44,132 44,102 L44,79 L44,94 C44,124 69,150 100,150 C130,150 156,124 156,94 L156,79 Z" id="Neck-Shadow" fill-opacity="0.1" fill="#000000" mask="url(#mask-silhouette)"></path>
+                </g>
+                    <!-- 其他部分 -->
+                    <svg>${option.mouthType}</svg>
+                    <svg>${option.eyeType}</svg>
+                    <svg>${option.topType}</svg>
+                    <svg>${option.clothesType}</svg>
+                    <svg>${option.eyebrowType}</svg>
+                    <svg>${option.facialHairType}</svg>
+                    <svg>${option.accessoriesType}</svg>
+                    <svg>${option.graphicShirtType}</svg>
+                </g>
+            </g>
+            </g>
+            </g>
+        </svg>`
+        }
+
+            //生成卡通头像
+            function createSvg() {
+                //得到4*26位的长度code.
+                let uuid = guid();
+                //生成svg元素.
+                let svg = svgGenerate(uuid);
+                //创建一个div,插入svg元素.
+                let span = window.document.createElement("span");
+                //直接将svg元素插入div中,兼容性最好.
+                span.innerHTML = `${svg}`;
+                let main = document.getElementById("main");
+                //添加div元素到main中.
+                main.appendChild(span);
+            }
+
+    </script>
 </head>
 <body>
 <div class="css-slider-wrapper">
@@ -232,10 +452,13 @@
         <label for="slider_4" class="numb4"><i class="fa fa-arrow-circle-left"></i></label>
     </div>
     <div class="slider slide1">
+        <span id="main" style="position: absolute;left: 0px;top: 0px;"></span>
         <div>
             <h2>SVG随机生成复杂卡通图像</h2>
+            <a href="#" class="button" onclick="createSvg()">生成图像</a>
             <a href="https://sanshiwu.github.io/study-web-svg/cartoon-avatar/complex.html" target="_blank"
                class="button">复杂卡通图像在线DEMO</a>
+            <a href="#" class="button" onclick="clearSvg()">清除图像</a>
         </div>
     </div>
     <div class="slider slide2">
