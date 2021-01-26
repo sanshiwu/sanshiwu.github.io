@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>简单svg头像生成</title>
+    <script>
+        "use strict";
+
+        function invertHex(hex) {
+            return (Number("0x1" + hex) ^ 0xffffff).toString(16).substr(1).toUpperCase();
+        }
+
+        function generateRgb(hex) {
+            let bigint = parseInt(hex, 16);
+            let r = (bigint >> 16) & 255;
+            let g = (bigint >> 8) & 255;
+            let b = bigint & 255;
+            return r + "," + g + "," + b;
+        }
+
+        function generatePath(curveVal, posVal, index) {
+            let cVal = curveVal;
+            let bigC = 300 - cVal;
+            let pos = posVal;
+            return "m 150 " + (100 + pos + 200 * index) + " Q " + bigC + " " + cVal + " " + (200 - pos - 200 * index) +
+                " 150 Q " + bigC + " " + bigC + " 150 " + (200 - pos - 200 * index) + " Q " + cVal + " " + bigC + " " + (100 + pos +
+                    200 * index) + " 150 Q " + cVal + " " + cVal + " 150 " + (100 + pos + 200 * index) + " z";
+        }
+
+        function svgTemplate(option) {
+            return `
+<svg width="120" height="120" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+    <rect id="bg" width="300" height="300" fill="rgb(${generateRgb(option.background)})" />
+    <path d="${option.paths[0]}" fill="rgb(${generateRgb(option.colors[0])})" />
+    <path d="${option.paths[1]}" fill="rgb(${generateRgb(option.colors[1])})" />
+    <path d="${option.paths[2]}" fill="rgb(${generateRgb(option.colors[2])})" />
+</svg>`;
+        }
+
+        function svgGenerate(uuid) {
+            let bgc1 = parseInt(uuid.substring(0, 6), 16);
+            uuid = uuid.substring(6);
+            let bgc2 = uuid;
+            let i0 = parseInt(uuid.substring(0, 2), 16);
+            uuid = uuid.substring(2);
+            let i1 = parseInt(uuid.substring(0, 2), 16);
+            uuid = uuid.substring(2);
+            let i2 = parseInt(uuid.substring(0, 2), 16);
+            uuid = uuid.substring(2);
+            let i3 = parseInt(uuid.substring(0, 2), 16);
+            uuid = uuid.substring(2);
+            let i4 = parseInt(uuid.substring(0, 2), 16);
+            uuid = uuid.substring(2);
+            let i5 = parseInt(uuid.substring(0, 2), 16);
+            let option = {
+                paths: [
+                    generatePath(i0, i1, 2),
+                    generatePath(i2, i3, 1),
+                    generatePath(i4, i5, 0),
+                ],
+                colors: [bgc2, invertHex(bgc2), invertHex(bgc1)],
+                background: bgc1,
+            };
+            return svgTemplate(option);
+        }
+
+        function S4() {
+            return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+        }
+
+        function guid() {
+            return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+        }
+
+        function createSvg() {
+            let uuid = guid();
+            let svg = svgGenerate(uuid);
+            //创建一个div,插入svg元素.
+            let div = window.document.createElement("div");
+            //左侧浮动元素,测试用.
+            div.style.float = "left";
+            //直接将svg元素插入div中,兼容性最好.
+            div.innerHTML = `${svg}`;
+            let main = document.getElementById("main");
+            //添加div元素到main中.
+            main.appendChild(div);
+        }
+
+        function clearSvg() {
+            let main = document.getElementById("main");
+            main.innerHTML = "";
+        }
+
+    </script>
+</head>
+<body>
+<button onclick="createSvg()">创建</button>
+<button onclick="clearSvg()">清除</button>
+<div id="main"></div>
+</body>
+</html>
