@@ -175,7 +175,18 @@
         .slide-radio4:checked ~ .slider {
             transform: translateX(-300%);
         }
-
+        .slide-radio1:checked ~ .slide1{
+            z-index: 989;
+        }
+        .slide-radio2:checked ~ .slide2{
+            z-index: 989;
+        }
+        .slide-radio3:checked ~ .slide3{
+            z-index: 989;
+        }
+        .slide-radio4:checked ~ .slide4{
+            z-index: 989;
+        }
         .slide-radio1:checked ~ .slide1 h2,
         .slide-radio2:checked ~ .slide2 h2,
         .slide-radio3:checked ~ .slide3 h2,
@@ -187,24 +198,31 @@
             transform: translateX(0);
             opacity: 1
         }
-
         @media only screen and (max-width: 767px) {
-            .slider h2 {
-                font-size: 20px;
+           .slider div {
+                font-size: 40px;
             }
 
             .slider > div {
                 padding: 0 2%
             }
-
-            .control label {
-                font-size: 35px;
+            .slider .button {
+                padding: 20px 40px;
             }
 
-            .slider .button {
-                padding: 0 30px;
+            .slider-pagination label {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                display: inline-block;
+                background: rgba(255, 255, 255, 0.2);
+                margin: 0 2px;
+                border: solid 1px rgba(255, 255, 255, 0.4);
+                cursor: pointer;
             }
         }
+
+
     </style>
     <script src="study-web-svg/cartoon-avatar/materials/mouth.js"></script>
     <script src="study-web-svg/cartoon-avatar/materials/accessories.js"></script>
