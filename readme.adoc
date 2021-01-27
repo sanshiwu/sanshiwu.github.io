@@ -2,4 +2,5 @@
 
 参考资料:
 https://github.com/loweisz/generate-avatar
-
+素材:
+https://github.com/fangpenlin/avataaars-generator
