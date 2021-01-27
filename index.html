@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>纯CSS,HTML实现轮播.</title>
-    <style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>纯CSS,HTML实现轮播图-SVG动态生成卡通图像和简单图像</title>
+  <meta name="keywords" Content="java,css,html,svg,自学开源,不使用框架,JAVA,CSS,HTML,SVG,每一行代码都有注释">
+  <meta name="description" content="不使用任何框架,纯css,html实现轮播图,svg动态生成卡通图像和简单图像">
+  <style>
         /* Slider wrapper*/
         .css-slider-wrapper {
             overflow: hidden;
@@ -222,17 +224,16 @@
             }
         }
 
-
-    </style>
-    <script src="study-web-svg/cartoon-avatar/materials/mouth.js"></script>
-    <script src="study-web-svg/cartoon-avatar/materials/accessories.js"></script>
-    <script src="study-web-svg/cartoon-avatar/materials/clothes.js"></script>
-    <script src="study-web-svg/cartoon-avatar/materials/eyebrows.js"></script>
-    <script src="study-web-svg/cartoon-avatar/materials/eyes.js"></script>
-    <script src="study-web-svg/cartoon-avatar/materials/hair.js"></script>
-    <script src="study-web-svg/cartoon-avatar/materials/shirt.js"></script>
-    <script src="study-web-svg/cartoon-avatar/materials/top.js"></script>
-    <script>
+  </style>
+  <script src="study-web-svg/cartoon-avatar/materials/mouth.js"></script>
+  <script src="study-web-svg/cartoon-avatar/materials/accessories.js"></script>
+  <script src="study-web-svg/cartoon-avatar/materials/clothes.js"></script>
+  <script src="study-web-svg/cartoon-avatar/materials/eyebrows.js"></script>
+  <script src="study-web-svg/cartoon-avatar/materials/eyes.js"></script>
+  <script src="study-web-svg/cartoon-avatar/materials/hair.js"></script>
+  <script src="study-web-svg/cartoon-avatar/materials/shirt.js"></script>
+  <script src="study-web-svg/cartoon-avatar/materials/top.js"></script>
+  <script>
         "use strict";
         const materials = {//卡通图svg元素
             mouthType: window.mouthTypes, //嘴巴
@@ -443,62 +444,61 @@
                 main.appendChild(span);
             }
 
-    </script>
+  </script>
 </head>
 <body>
 <div class="css-slider-wrapper">
-    <input type="radio" name="slider" class="slide-radio1" checked id="slider_1">
-    <input type="radio" name="slider" class="slide-radio2" id="slider_2">
-    <input type="radio" name="slider" class="slide-radio3" id="slider_3">
-    <input type="radio" name="slider" class="slide-radio4" id="slider_4">
-    <div class="slider-pagination">
-        <label for="slider_1" class="page1"></label>
-        <label for="slider_2" class="page2"></label>
-        <label for="slider_3" class="page3"></label>
-        <label for="slider_4" class="page4"></label>
+  <input type="radio" name="slider" class="slide-radio1" checked id="slider_1">
+  <input type="radio" name="slider" class="slide-radio2" id="slider_2">
+  <input type="radio" name="slider" class="slide-radio3" id="slider_3">
+  <input type="radio" name="slider" class="slide-radio4" id="slider_4">
+  <div class="slider-pagination">
+    <label for="slider_1" class="page1"></label>
+    <label for="slider_2" class="page2"></label>
+    <label for="slider_3" class="page3"></label>
+    <label for="slider_4" class="page4"></label>
+  </div>
+  <div class="next control">
+    <label for="slider_1" class="numb1"><i class="fa fa-arrow-circle-right"></i></label>
+    <label for="slider_2" class="numb2"><i class="fa fa-arrow-circle-right"></i></label>
+    <label for="slider_3" class="numb3"><i class="fa fa-arrow-circle-right"></i></label>
+    <label for="slider_4" class="numb4"><i class="fa fa-arrow-circle-right"></i></label>
+  </div>
+  <div class="previous control">
+    <label for="slider_1" class="numb1"><i class="fa fa-arrow-circle-left"></i></label>
+    <label for="slider_2" class="numb2"><i class="fa fa-arrow-circle-left"></i></label>
+    <label for="slider_3" class="numb3"><i class="fa fa-arrow-circle-left"></i></label>
+    <label for="slider_4" class="numb4"><i class="fa fa-arrow-circle-left"></i></label>
+  </div>
+  <div class="slider slide1">
+    <span id="main" style="position: absolute;left: 0px;top: 0px;"></span>
+    <div>
+      <h2>SVG随机生成复杂卡通图像</h2>
+      <a href="#" class="button" onclick="createSvg()">生成图像</a>
+      <a href="#" class="button" onclick="clearSvg()">清除图像</a>
     </div>
-    <div class="next control">
-        <label for="slider_1" class="numb1"><i class="fa fa-arrow-circle-right"></i></label>
-        <label for="slider_2" class="numb2"><i class="fa fa-arrow-circle-right"></i></label>
-        <label for="slider_3" class="numb3"><i class="fa fa-arrow-circle-right"></i></label>
-        <label for="slider_4" class="numb4"><i class="fa fa-arrow-circle-right"></i></label>
+  </div>
+  <div class="slider slide2">
+    <div>
+      <h2>SVG随机生成图像</h2>
+      <a href="https://sanshiwu.com/study-web-svg/cartoon-avatar/simple.html" target="_blank"
+         class="button">简单图像在线DEMO</a>
+      <a href="https://sanshiwu.com/study-web-svg/cartoon-avatar/complex.html" target="_blank"
+         class="button">复杂卡通图像在线DEMO</a>
     </div>
-    <div class="previous control">
-        <label for="slider_1" class="numb1"><i class="fa fa-arrow-circle-left"></i></label>
-        <label for="slider_2" class="numb2"><i class="fa fa-arrow-circle-left"></i></label>
-        <label for="slider_3" class="numb3"><i class="fa fa-arrow-circle-left"></i></label>
-        <label for="slider_4" class="numb4"><i class="fa fa-arrow-circle-left"></i></label>
+  </div>
+  <div class="slider slide3">
+    <div>
+      <h2>访问GITHUB加星</h2>
+      <a href="https://github.com/sanshiwu/sanshiwu.github.io" target="_blank" class="button">STAR</a>
     </div>
-    <div class="slider slide1">
-        <span id="main" style="position: absolute;left: 0px;top: 0px;"></span>
-        <div>
-            <h2>SVG随机生成复杂卡通图像</h2>
-            <a href="#" class="button" onclick="createSvg()">生成图像</a>
-           
-            <a href="#" class="button" onclick="clearSvg()">清除图像</a>
-        </div>
+  </div>
+  <div class="slider slide4">
+    <div>
+      <h2>访问GITHUB</h2>
+      <a href="https://github.com/sanshiwu" target="_blank" class="button">GITHUB</a>
     </div>
-    <div class="slider slide2">
-        <div>
-            <h2>SVG随机生成图像</h2>
-            <a href="https://sanshiwu.github.io/study-web-svg/cartoon-avatar/simple.html" target="_blank"
-               class="button">简单图像在线DEMO</a>
-            <a href="https://sanshiwu.github.io/study-web-svg/cartoon-avatar/complex.html" target="_blank"
-               class="button">复杂卡通图像在线DEMO</a>
-        </div>
-    </div>
-    <div class="slider slide3">
-        <div>
-            <h2>访问GITHUB加星</h2>
-            <a href="https://github.com/sanshiwu/sanshiwu.github.io" target="_blank" class="button">STAR</a>
-        </div>
-    </div>
-    <div class="slider slide4">
-        <div>
-            <h2>访问GITHUB</h2>
-            <a href="https://github.com/sanshiwu" target="_blank" class="button">GITHUB</a>
-        </div>
-    </div>
+  </div>
 </div>
 </body>
 </html>
