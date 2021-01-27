@@ -2,4 +2,5 @@
 !*/
 !study-*/**
 !/.gitignore
+!normalize.css
 !readme.adoc

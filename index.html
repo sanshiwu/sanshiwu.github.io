@@ -1,69 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>纯CSS,HTML实现轮播图-SVG动态生成卡通图像和简单图像</title>
-  <meta name="keywords" Content="java,css,html,svg,自学开源,不使用框架,JAVA,CSS,HTML,SVG,每一行代码都有注释">
-  <meta name="description" content="不使用任何框架,纯css,html实现轮播图,svg动态生成卡通图像和简单图像">
-  <style>
-        /* Slider wrapper*/
-        .css-slider-wrapper {
-            overflow: hidden;
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 0;
-            bottom: 0;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>纯CSS,HTML实现轮播图-SVG动态生成卡通图像和简单图像</title>
+    <meta name="keywords" Content="java,css,html,svg,自学开源,不使用框架,JAVA,CSS,HTML,SVG,每一行代码都有注释">
+    <meta name="description" content="不使用任何框架,纯css,html实现轮播图,上一页,下一页,点击翻页,svg动态生成卡通图像和简单图像">
+    <!-- 去掉默认浏览器的样式 -->
+    <link href="normalize.css" rel="stylesheet">
+    <style>
+        /*隐藏默认的单选框,使用label代替*/
+        input {
+            display: none;
         }
 
-        /* Slider */
+        /* 四个轮播图,绝对定位后重合在一起,原来采用一行排列,移动距离轮播left: 300%，left: 200%，left: 100%,left: 0*/
         .slider {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            position: absolute;
-            top: 0;
-            opacity: 1;
-            z-index: 0;
+            /*flex布局*/
             display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
             align-items: center;
             justify-content: center;
-            align-content: center;
-            transition: transform 1600ms;
-        }
-
-        /* each slide background color */
-        .slide1 {
-            background: #4ba065;
-            background-size: 100% 100%;
-            left: 0;
-        }
-
-        .slide2 {
-            background: #b35d57;
-            background-size: 100% 100%;
-            left: 100%
-        }
-
-        .slide3 {
-            background: #cd84da;
-            background-size: 100% 100%;
-            left: 200%
-        }
-
-        .slide4 {
-            background: #607d8d;
-            background-size: 100% 100%;
-            left: 300%;
-        }
-
-        .slider > div {
             text-align: center;
+            /* 利用背景颜色,进行变换*/
+            transition: transform 800ms, background 800ms ease-in-out 1s;
+            /*延迟一秒再过渡*/
+            transition-delay: 1s;
+            /*先X轴移动500px,再过渡到0px*/
+            transform: translateX(-500px);
         }
 
-        /* Slider inner content */
         .slider h2 {
             color: #FFF;
             font-weight: 900;
@@ -84,52 +54,19 @@
             transform: translateX(-500px);
         }
 
-        .slider h2, .slider .button {
+        .slider h2,
+        .slider .button {
             transition: transform 800ms, opacity 800ms;
             transition-delay: 1s;
         }
 
-        /* Next and previous button */
-        .control {
-            position: absolute;
-            top: 50%;
-            width: 50px;
-            height: 50px;
-            margin-top: -25px;
-            z-index: 55;
-        }
-
-        .control label {
-            z-index: 0;
-            display: none;
-            text-align: center;
-            line-height: 50px;
-            font-size: 50px;
-            color: #FFF;
-            cursor: pointer;
-            opacity: 0.2;
-        }
-
-        .control label:hover {
-            opacity: 0.5;
-        }
-
-        .next {
-            right: 1%;
-        }
-
-        .previous {
-            left: 1%;
-        }
-
-        /* Slider pagination */
         .slider-pagination {
             position: absolute;
+            left: 0;
             bottom: 20px;
             width: 100%;
-            left: 0;
             text-align: center;
-            z-index: 1000;
+            z-index: 998;
         }
 
         .slider-pagination label {
@@ -143,52 +80,106 @@
             cursor: pointer;
         }
 
-        /* Slider control active css */
+        .control {
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            top: 50%;
+            z-index: 999;
+        }
+
+        .control label {
+            text-align: center;
+            line-height: 50px;
+            font-size: 50px;
+            color: #ffffff;
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        /*下一页按钮*/
+        .next {
+            right: 1%;
+        }
+
+        /*上一页按钮*/
+        .previous {
+            left: 1%;
+        }
+
+        /*默认隐藏上一页,下一页按钮*/
+        .numb1, .numb2, .numb3, .numb4 {
+            display: none;
+        }
+
+        /* 选中按钮时,显示当前页的上一页和下一页按钮,并增加颜色 */
         .slide-radio1:checked ~ .next .numb2,
         .slide-radio2:checked ~ .next .numb3,
         .slide-radio3:checked ~ .next .numb4,
         .slide-radio2:checked ~ .previous .numb1,
         .slide-radio3:checked ~ .previous .numb2,
         .slide-radio4:checked ~ .previous .numb3 {
-            z-index: 1
+            background-color: #0055aa;
+            display: block;
         }
 
-        /* Slider pagination active css */
+        /* 选中按钮时,给按钮增加颜色 */
         .slide-radio1:checked ~ .slider-pagination .page1,
         .slide-radio2:checked ~ .slider-pagination .page2,
         .slide-radio3:checked ~ .slider-pagination .page3,
         .slide-radio4:checked ~ .slider-pagination .page4 {
-            background: rgba(255, 255, 255, 1)
+            background-color: #bf126b;
         }
 
-        /* css for sliding  effect when you click on control button*/
+        /* css3 根据背景颜色 过渡动画*/
         .slide-radio1:checked ~ .slider {
-            transform: translateX(0%);
+            background: #4ba065;
+            /*先X轴移动500px,再过渡到0px*/
+            transform: translateX(0px);
         }
 
+        /* css3 根据背景颜色 过渡动画*/
         .slide-radio2:checked ~ .slider {
-            transform: translateX(-100%);
+            background: #b35d57;
+            /*先X轴移动500px,再过渡到0px*/
+            transform: translateX(0px);
         }
 
+        /* css3 根据背景颜色 过渡动画*/
         .slide-radio3:checked ~ .slider {
-            transform: translateX(-200%);
+            background: #cd84da;
+            /*先X轴移动500px,再过渡到0px*/
+            transform: translateX(0px);
         }
 
+        /* css3 根据背景颜色 过渡动画*/
         .slide-radio4:checked ~ .slider {
-            transform: translateX(-300%);
+            background: #607d8d;
+            /*先X轴移动500px,再过渡到0px*/
+            transform: translateX(0px);
         }
-        .slide-radio1:checked ~ .slide1{
+
+        /* 选中按钮时,更改z-index,放到最上面,可以覆盖其他div*/
+        .slide-radio1:checked ~ .slide1 {
             z-index: 989;
         }
-        .slide-radio2:checked ~ .slide2{
+
+        /* 选中按钮时,更改z-index,放到最上面,可以覆盖其他div*/
+        .slide-radio2:checked ~ .slide2 {
             z-index: 989;
         }
-        .slide-radio3:checked ~ .slide3{
+
+        /* 选中按钮时,更改z-index,放到最上面,可以覆盖其他div*/
+        .slide-radio3:checked ~ .slide3 {
             z-index: 989;
         }
-        .slide-radio4:checked ~ .slide4{
+
+        /* 选中按钮时,更改z-index,放到最上面,可以覆盖其他div*/
+        .slide-radio4:checked ~ .slide4 {
             z-index: 989;
         }
+
+        /* 选中按钮时 增加过渡效果*/
         .slide-radio1:checked ~ .slide1 h2,
         .slide-radio2:checked ~ .slide2 h2,
         .slide-radio3:checked ~ .slide3 h2,
@@ -197,17 +188,20 @@
         .slide-radio2:checked ~ .slide2 .button,
         .slide-radio3:checked ~ .slide3 .button,
         .slide-radio4:checked ~ .slide4 .button {
+            /*先X轴移动500px,再过渡到0px*/
             transform: translateX(0);
-            opacity: 1
+            opacity: 1;
         }
+
         @media only screen and (max-width: 767px) {
-           .slider div {
+            .slider div {
                 font-size: 40px;
             }
 
             .slider > div {
                 padding: 0 2%
             }
+
             .slider .button {
                 padding: 20px 40px;
             }
@@ -223,17 +217,16 @@
                 cursor: pointer;
             }
         }
-
-  </style>
-  <script src="study-web-svg/cartoon-avatar/materials/mouth.js"></script>
-  <script src="study-web-svg/cartoon-avatar/materials/accessories.js"></script>
-  <script src="study-web-svg/cartoon-avatar/materials/clothes.js"></script>
-  <script src="study-web-svg/cartoon-avatar/materials/eyebrows.js"></script>
-  <script src="study-web-svg/cartoon-avatar/materials/eyes.js"></script>
-  <script src="study-web-svg/cartoon-avatar/materials/hair.js"></script>
-  <script src="study-web-svg/cartoon-avatar/materials/shirt.js"></script>
-  <script src="study-web-svg/cartoon-avatar/materials/top.js"></script>
-  <script>
+    </style>
+    <script src="study-web-svg/cartoon-avatar/materials/mouth.js"></script>
+    <script src="study-web-svg/cartoon-avatar/materials/accessories.js"></script>
+    <script src="study-web-svg/cartoon-avatar/materials/clothes.js"></script>
+    <script src="study-web-svg/cartoon-avatar/materials/eyebrows.js"></script>
+    <script src="study-web-svg/cartoon-avatar/materials/eyes.js"></script>
+    <script src="study-web-svg/cartoon-avatar/materials/hair.js"></script>
+    <script src="study-web-svg/cartoon-avatar/materials/shirt.js"></script>
+    <script src="study-web-svg/cartoon-avatar/materials/top.js"></script>
+    <script>
         "use strict";
         const materials = {//卡通图svg元素
             mouthType: window.mouthTypes, //嘴巴
@@ -366,6 +359,22 @@
                 + S4() + S4() + S4() + S4() + S4() + S4() + S4() + S4());
         }
 
+        //生成卡通头像
+        function createSvg() {
+            //得到4*26位的长度code.
+            let uuid = guid();
+            //生成svg元素.
+            let svg = svgGenerate(uuid);
+            //创建一个div,插入svg元素.
+            let span = window.document.createElement("span");
+            //直接将svg元素插入div中,兼容性最好.
+            span.innerHTML = `${svg}`;
+            let main = document.getElementById("main");
+            //添加div元素到main中.
+            main.appendChild(span);
+        }
+
+        //清除卡通头像
         function clearSvg() {
             let main = document.getElementById("main");
             main.innerHTML = "";
@@ -377,128 +386,120 @@
         <svg width="120" height="120" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="--avataaar-hair-color:${option.hairColor}; --avataaar-facial-hair-color:${option.facialHairColor}; --avataaar-hat-color:${option.hatColor}; --avataaar-shirt-color:${option.shirtColor};">
             <defs>
                 <!-- 背景圆形,半径的大小可以调整.与 stroke-width 配合使用.-->
-                <circle id="path-1" cx="120" cy="120" r="125"></circle>
+            <circle id="path-1" cx="120" cy="120" r="125"></circle>
                 <!-- 遮罩,主要是为了圆形背景使用,但是使用裁剪不太好使,需要进一步看看 -->
-                <path d="M12,160 C12,226 65,280 132,280 C198,280 252,226 252,160 L264,160 L264,-1 L-3,-1 L-3,160 L12,160 Z" id="path-3"></path>
+            <path d="M12,160 C12,226 65,280 132,280 C198,280 252,226 252,160 L264,160 L264,-1 L-3,-1 L-3,160 L12,160 Z" id="path-3"></path>
                 <!-- 整个图像的轮廓. -->
-                <path d="M124,144 L124,163 L128,163 L128,163 C167,163 200,195 200,235 L200,244 L0,244 L0,235 C-4,195 32,163 72,163 L72,163 L76,163 L76,144 C58,136 46,119 44,99 C38,99 34,94 34,88 L34,74 C34,68 38,63 44,62 L44,56 L44,56 C44,25 69,5 100,0 L100,0 L100,0 C130,-5 156,25 156,56 L156,62 C161,63 166,68 166,74 L166,88 C166,94 161,99 155,99 C153,119 141,136 124,144 Z" id="path-silhouette"></path>
+            <path d="M124,144 L124,163 L128,163 L128,163 C167,163 200,195 200,235 L200,244 L0,244 L0,235 C-4,195 32,163 72,163 L72,163 L76,163 L76,144 C58,136 46,119 44,99 C38,99 34,94 34,88 L34,74 C34,68 38,63 44,62 L44,56 L44,56 C44,25 69,5 100,0 L100,0 L100,0 C130,-5 156,25 156,56 L156,62 C161,63 166,68 166,74 L166,88 C166,94 161,99 155,99 C153,119 141,136 124,144 Z" id="path-silhouette"></path>
             </defs>
             <g id="Avataaar" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
             <g transform="translate(-825, -1100)" id="Avataaar/Circle">
             <g transform="translate(825, 1100)">
                 <!-- 方形的框.height="245" 需要随时调整. -->
-                <!--
-                <g id="Square" transform="translate(12, 40)">
-                <g id="Color/Palette/Blue-01" mask="url(#mask-2)" fill="#65C9FF">
-                    <rect id="🖍Color" x="0" y="0" width="240" height="245" stroke="red" fill="#e1e89d" stroke-width="10" stroke-opacity="0.6" fill-opacity="0.6"></rect>
-                </g>
-                </g>
-                <g id="Avataaar" stroke-width="1" fill-rule="evenodd" fill="black">
-                -->
+            <!--
+            <g id="Square" transform="translate(12, 40)">
+            <g id="Color/Palette/Blue-01" mask="url(#mask-2)" fill="#65C9FF">
+            <rect id="🖍Color" x="0" y="0" width="240" height="245" stroke="red" fill="#e1e89d" stroke-width="10" stroke-opacity="0.6" fill-opacity="0.6"></rect>
+            </g>
+            </g>
+            <g id="Avataaar" stroke-width="1" fill-rule="evenodd" fill="black">
+            -->
                 <!-- 圆形的框. -->
 
-                <g id="Circle" transform="translate(12, 40)">
-                    <use id="Circle-Background" stroke="red" fill="#e1e89d" stroke-width="10" stroke-opacity="0.6" fill-opacity="0.6"  xlink:href="#path-1" ></use>
-                </g>
-                    <mask id="mask-4" fill="white"><use xlink:href="#path-3"></use></mask>
-                <g id="Avataaar" fill="black" mask="url(#mask-4)">
-                
+            <g id="Circle" transform="translate(12, 40)">
+            <use id="Circle-Background" stroke="red" fill="#e1e89d" stroke-width="10" stroke-opacity="0.6" fill-opacity="0.6"  xlink:href="#path-1" ></use>
+            </g>
+            <mask id="mask-4" fill="white"><use xlink:href="#path-3"></use></mask>
+            <g id="Avataaar" fill="black" mask="url(#mask-4)">
+
                 <!-- stroke-width="1" fill-rule="evenodd"-->
                 <!-- 身体部分 -->
-                <g id="Body" transform="translate(32, 36)">
-                    <!-- 使用轮廓,遮罩脖子和下巴连接处增加一点阴影. -->
-                    <mask id="mask-silhouette" fill="white"><use xlink:href="#path-silhouette"></use></mask>
-                    <!-- 复制轮廓,更改皮肤颜色. -->
-                    <use fill="${option.skinColor}" xlink:href="#path-silhouette"></use>
-                    <!-- 脖子和下巴连接处增加一点阴影. -->
-                    <path d="M156,79 L156,102 C156,132 130,158 100,158 C69,158 44,132 44,102 L44,79 L44,94 C44,124 69,150 100,150 C130,150 156,124 156,94 L156,79 Z" id="Neck-Shadow" fill-opacity="0.1" fill="#000000" mask="url(#mask-silhouette)"></path>
-                </g>
-                    <!-- 其他部分 -->
-                    <svg>${option.mouthType}</svg>
-                    <svg>${option.eyeType}</svg>
-                    <svg>${option.topType}</svg>
-                    <svg>${option.clothesType}</svg>
-                    <svg>${option.eyebrowType}</svg>
-                    <svg>${option.facialHairType}</svg>
-                    <svg>${option.accessoriesType}</svg>
-                    <svg>${option.graphicShirtType}</svg>
-                </g>
+            <g id="Body" transform="translate(32, 36)">
+                <!-- 使用轮廓,遮罩脖子和下巴连接处增加一点阴影. -->
+            <mask id="mask-silhouette" fill="white"><use xlink:href="#path-silhouette"></use></mask>
+                <!-- 复制轮廓,更改皮肤颜色. -->
+            <use fill="${option.skinColor}" xlink:href="#path-silhouette"></use>
+                <!-- 脖子和下巴连接处增加一点阴影. -->
+            <path d="M156,79 L156,102 C156,132 130,158 100,158 C69,158 44,132 44,102 L44,79 L44,94 C44,124 69,150 100,150 C130,150 156,124 156,94 L156,79 Z" id="Neck-Shadow" fill-opacity="0.1" fill="#000000" mask="url(#mask-silhouette)"></path>
+            </g>
+                <!-- 其他部分 -->
+            <svg>${option.mouthType}</svg>
+            <svg>${option.eyeType}</svg>
+            <svg>${option.topType}</svg>
+            <svg>${option.clothesType}</svg>
+            <svg>${option.eyebrowType}</svg>
+            <svg>${option.facialHairType}</svg>
+            <svg>${option.accessoriesType}</svg>
+            <svg>${option.graphicShirtType}</svg>
             </g>
             </g>
             </g>
-        </svg>`
+            </g>
+            </svg>`
         }
-
-            //生成卡通头像
-            function createSvg() {
-                //得到4*26位的长度code.
-                let uuid = guid();
-                //生成svg元素.
-                let svg = svgGenerate(uuid);
-                //创建一个div,插入svg元素.
-                let span = window.document.createElement("span");
-                //直接将svg元素插入div中,兼容性最好.
-                span.innerHTML = `${svg}`;
-                let main = document.getElementById("main");
-                //添加div元素到main中.
-                main.appendChild(span);
-            }
-
-  </script>
+    </script>
 </head>
 <body>
 <div class="css-slider-wrapper">
-  <input type="radio" name="slider" class="slide-radio1" checked id="slider_1">
-  <input type="radio" name="slider" class="slide-radio2" id="slider_2">
-  <input type="radio" name="slider" class="slide-radio3" id="slider_3">
-  <input type="radio" name="slider" class="slide-radio4" id="slider_4">
-  <div class="slider-pagination">
-    <label for="slider_1" class="page1"></label>
-    <label for="slider_2" class="page2"></label>
-    <label for="slider_3" class="page3"></label>
-    <label for="slider_4" class="page4"></label>
-  </div>
-  <div class="next control">
-    <label for="slider_1" class="numb1"><i class="fa fa-arrow-circle-right"></i></label>
-    <label for="slider_2" class="numb2"><i class="fa fa-arrow-circle-right"></i></label>
-    <label for="slider_3" class="numb3"><i class="fa fa-arrow-circle-right"></i></label>
-    <label for="slider_4" class="numb4"><i class="fa fa-arrow-circle-right"></i></label>
-  </div>
-  <div class="previous control">
-    <label for="slider_1" class="numb1"><i class="fa fa-arrow-circle-left"></i></label>
-    <label for="slider_2" class="numb2"><i class="fa fa-arrow-circle-left"></i></label>
-    <label for="slider_3" class="numb3"><i class="fa fa-arrow-circle-left"></i></label>
-    <label for="slider_4" class="numb4"><i class="fa fa-arrow-circle-left"></i></label>
-  </div>
-  <div class="slider slide1">
-    <span id="main" style="position: absolute;left: 0px;top: 0px;"></span>
-    <div>
-      <h2>SVG随机生成复杂卡通图像</h2>
-      <a href="#" class="button" onclick="createSvg()">生成图像</a>
-      <a href="#" class="button" onclick="clearSvg()">清除图像</a>
+    <!-- 4个单选框 默认选中第一个-->
+    <input type="radio" name="slider" class="slide-radio1" checked id="slider_1">
+    <input type="radio" name="slider" class="slide-radio2" id="slider_2">
+    <input type="radio" name="slider" class="slide-radio3" id="slider_3">
+    <input type="radio" name="slider" class="slide-radio4" id="slider_4">
+    <!-- 控制4个单选框点击 -->
+    <div class="slider-pagination">
+        <label for="slider_1" class="page1"></label>
+        <label for="slider_2" class="page2"></label>
+        <label for="slider_3" class="page3"></label>
+        <label for="slider_4" class="page4"></label>
     </div>
-  </div>
-  <div class="slider slide2">
-    <div>
-      <h2>SVG随机生成图像</h2>
-      <a href="https://www.sanshiwu.com/study-web-svg/cartoon-avatar/simple.html" target="_blank"
-         class="button">简单图像在线DEMO</a>
-      <a href="https://www.sanshiwu.com/study-web-svg/cartoon-avatar/complex.html" target="_blank"
-         class="button">复杂卡通图像在线DEMO</a>
+    <!-- 控制 下一页 -->
+    <div class="next control">
+        <label for="slider_1" class="numb1">➡</label>
+        <label for="slider_2" class="numb2">➡</label>
+        <label for="slider_3" class="numb3">➡</label>
+        <label for="slider_4" class="numb4">➡</label>
     </div>
-  </div>
-  <div class="slider slide3">
-    <div>
-      <h2>访问GITHUB加星</h2>
-      <a href="https://github.com/sanshiwu/sanshiwu.github.io" target="_blank" class="button">STAR</a>
+    <!-- 控制 上一页 -->
+    <div class="previous control">
+        <label for="slider_1" class="numb1">⬅</label>
+        <label for="slider_2" class="numb2">⬅</label>
+        <label for="slider_3" class="numb3">⬅</label>
+        <label for="slider_4" class="numb4">⬅</label>
     </div>
-  </div>
-  <div class="slider slide4">
-    <div>
-      <h2>访问GITHUB</h2>
-      <a href="https://github.com/sanshiwu" target="_blank" class="button">GITHUB</a>
+    <!-- 第1页显示的内容 -->
+    <div class="slider slide1">
+        <span id="main" style="position: absolute;left: 0;top: 0;"></span>
+        <div>
+            <h2>SVG随机生成复杂卡通图像</h2>
+            <a href="#" class="button" onclick="createSvg()">生成图像</a>
+            <a href="#" class="button" onclick="clearSvg()">清除图像</a>
+        </div>
     </div>
-  </div>
+    <!-- 第2页显示的内容 -->
+    <div class="slider slide2">
+        <div>
+            <h2>SVG随机生成图像</h2>
+            <a href="https://www.sanshiwu.com/study-web-svg/cartoon-avatar/simple.html" target="_blank"
+               class="button">简单图像在线DEMO</a>
+            <a href="https://www.sanshiwu.com/study-web-svg/cartoon-avatar/complex.html" target="_blank"
+               class="button">复杂卡通图像在线DEMO</a>
+        </div>
+    </div>
+    <!-- 第3页显示的内容 -->
+    <div class="slider slide3">
+        <div>
+            <h2>访问GITHUB加星</h2>
+            <a href="https://github.com/sanshiwu/sanshiwu.github.io" target="_blank" class="button">STAR</a>
+        </div>
+    </div>
+    <!-- 第4页显示的内容 -->
+    <div class="slider slide4">
+        <div>
+            <h2>访问GITHUB</h2>
+            <a href="https://github.com/sanshiwu" target="_blank" class="button">GITHUB</a>
+        </div>
+    </div>
 </div>
 </body>
 </html>
