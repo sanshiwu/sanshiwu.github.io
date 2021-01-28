@@ -85,7 +85,7 @@
             height: 50px;
             position: absolute;
             top: 50%;
-            z-index: 999;
+            z-index: 998;
         }
 
         .control label {
@@ -95,6 +95,13 @@
             color: #ffffff;
             cursor: pointer;
             opacity: 1;
+        }
+
+        .tag {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 999;
         }
 
         /*下一页按钮*/
@@ -154,7 +161,7 @@
 
         /* css3 根据背景颜色 过渡动画*/
         .slide-radio4:checked ~ .slider {
-            background: #607d8d;
+            background: #d95d24;
             /*先X轴移动500px,再过渡到0px*/
             transform: translateX(0px);
         }
@@ -382,10 +389,8 @@
 
         //卡通图svg模板.
         function svgTemplate(option) {
-            return `
-        <svg width="120" height="120" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="--avataaar-hair-color:${option.hairColor}; --avataaar-facial-hair-color:${option.facialHairColor}; --avataaar-hat-color:${option.hatColor}; --avataaar-shirt-color:${option.shirtColor};">
-            <defs>
-            <!-- 背景圆形,半径的大小可以调整.与 stroke-width 配合使用.-->
+            return `<svg width="120" height="120" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="--avataaar-hair-color:${option.hairColor}; --avataaar-facial-hair-color:${option.facialHairColor}; --avataaar-hat-color:${option.hatColor}; --avataaar-shirt-color:${option.shirtColor};">
+            <defs> <!-- 背景圆形,半径的大小可以调整.与 stroke-width 配合使用.-->
             <circle id="path-1" cx="120" cy="120" r="125"></circle>
                 <!-- 遮罩,主要是为了圆形背景使用,但是使用裁剪不太好使,需要进一步看看 -->
             <path d="M12,160 C12,226 65,280 132,280 C198,280 252,226 252,160 L264,160 L264,-1 L-3,-1 L-3,160 L12,160 Z" id="path-3"></path>
@@ -440,6 +445,39 @@
     </script>
 </head>
 <body>
+<!-- 网页左上角的tag,用来连接到外部URL.-->
+<div class="tag">
+    <svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"
+         xmlns:xlink="http://www.w3.org/1999/xlink">
+
+        <defs>
+            <linearGradient id="orange_red" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#d95d24"/>
+                <stop offset="10%" stop-color="#cd84da"/>
+                <stop offset="20%" stop-color="blue"/>
+                <stop offset="30%" stop-color="#0A96E3"/>
+                <stop offset="40%" stop-color="red"/>
+                <stop offset="50%" stop-color="#cdbb20"/>
+                <stop offset="60%" stop-color="orange"/>
+                <stop offset="70%" stop-color="#700cd4"/>
+                <stop offset="80%" stop-color="black"/>
+                <stop offset="90%" stop-color="orange"/>
+                <stop offset="100%" stop-color="red"/>
+            </linearGradient>
+        </defs>
+        <a xlink:href="https://github.com/sanshiwu" target="_blank">
+            <path fill-opacity="0.6" id="path" d="M 0,150 0,100 100,0 150,0" fill="url(#orange_red)"/>
+            <path id="path1" d="M 10,125 125,10"/>
+            <text>
+                <animateMotion dur="5s" repeatCount="indefinite" from="0" to="100" path="M 0,2 2,0"/>
+                <textPath fill-opacity="1" font-size="15"
+                          xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#path1">
+                    访问GITHUB查看源码
+                </textPath>
+            </text>
+        </a>
+    </svg>
+</div>
 <div class="css-slider-wrapper">
     <!-- 4个单选框 默认选中第一个-->
     <input type="radio" name="slider" class="slide-radio1" checked id="slider_1">
@@ -490,7 +528,7 @@
     <div class="slider slide3">
         <div>
             <h2>SVG图像在线编辑</h2>
-            <a href="https://www.sanshiwu.com/study-web-svg/cartoon-avatar/online.html" target="_blank" class="button">STAR</a>
+            <a href="https://www.sanshiwu.com/online.html" target="_blank" class="button">STAR</a>
         </div>
     </div>
     <!-- 第4页显示的内容 -->

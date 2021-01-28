@@ -12,7 +12,12 @@
         * {
             box-sizing: content-box; /*盒子模型符合w3c标准*/
         }
-
+        .tag {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 999;
+        }
         html, body {
             font-size: 20px; /*默认字体大小20px*/
             color: #fff; /*默认字体颜色白色*/
@@ -332,6 +337,39 @@
 </head>
 <body>
 <div>
+    <!-- 网页左上角的tag,用来连接到外部URL.-->
+    <div class="tag">
+        <svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"
+             xmlns:xlink="http://www.w3.org/1999/xlink">
+
+            <defs>
+                <linearGradient id="orange_red" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#d95d24"/>
+                    <stop offset="10%" stop-color="#cd84da"/>
+                    <stop offset="20%" stop-color="blue"/>
+                    <stop offset="30%" stop-color="#0A96E3"/>
+                    <stop offset="40%" stop-color="red"/>
+                    <stop offset="50%" stop-color="#cdbb20"/>
+                    <stop offset="60%" stop-color="orange"/>
+                    <stop offset="70%" stop-color="#700cd4"/>
+                    <stop offset="80%" stop-color="black"/>
+                    <stop offset="90%" stop-color="orange"/>
+                    <stop offset="100%" stop-color="red"/>
+                </linearGradient>
+            </defs>
+            <a xlink:href="https://github.com/sanshiwu" target="_blank">
+                <path fill-opacity="0.6" id="path" d="M 0,150 0,100 100,0 150,0" fill="url(#orange_red)"/>
+                <path id="path1" d="M 10,125 125,10"/>
+                <text>
+                    <animateMotion dur="5s" repeatCount="indefinite" from="0" to="100" path="M 0,2 2,0"/>
+                    <textPath fill-opacity="1" font-size="15"
+                              xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#path1">
+                        访问GITHUB查看源码
+                    </textPath>
+                </text>
+            </a>
+        </svg>
+    </div>
     <div class="header">
         <h1>免费卡通头像制作</h1>
         <div>赶快制作自己免费卡通头像吧!</div>
