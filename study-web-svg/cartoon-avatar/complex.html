@@ -171,9 +171,8 @@
         function svgTemplate(option) {
             return `
     <svg width="120" height="120" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="--avataaar-hair-color:${option.hairColor}; --avataaar-facial-hair-color:${option.facialHairColor}; --avataaar-hat-color:${option.hatColor}; --avataaar-shirt-color:${option.shirtColor};">
-        <defs>
-            <!-- 背景圆形,半径的大小可以调整.与 stroke-width 配合使用.-->
-            <circle id="path-1" cx="120" cy="120" r="125"></circle>
+        <defs><!-- 背景圆形,半径的大小可以调整.与 stroke-width 配合使用.-->
+        <circle id="path-1" cx="120" cy="120" r="125"></circle>
             <!-- 遮罩,主要是为了圆形背景使用,但是使用裁剪不太好使,需要进一步看看 -->
             <path d="M12,160 C12,226 65,280 132,280 C198,280 252,226 252,160 L264,160 L264,-1 L-3,-1 L-3,160 L12,160 Z" id="path-3"></path>
             <!-- 整个图像的轮廓. -->
