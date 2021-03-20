@@ -4118,9 +4118,9 @@ section.hero .hero-main .hero-right {
 <ul class="sectlevel3">
 <li><a href="#_the_first_way">8.3.1. The first way:</a></li>
 <li><a href="#_the_second_way">8.3.2. The second way</a></li>
+<li><a href="#_some_test_cases">8.3.3. Some test cases</a></li>
 </ul>
 </li>
-<li><a href="#_whats_next">8.4. What’s next</a></li>
 </ul>
 </li>
 <li><a href="#_how_to_develop_a_spi_implementation">9. How to develop a SPI implementation?</a></li>
@@ -4164,7 +4164,7 @@ section.hero .hero-main .hero-right {
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p><a href="https://github.com/sanshiwu/study-juli">GitHub Repository</a>.</p>
+<p><a href="https://github.com/sanshiwu/study">GitHub Repository</a>.</p>
 </div>
 <div class="paragraph">
 <p>From now on,we&#8217;ll just use the word <strong>Juli</strong> to refer to Study juli log.</p>
@@ -4924,7 +4924,7 @@ It calls for listing modifiers in the following order:</p>
 <p>The example code is repo.</p>
 </div>
 <div class="paragraph">
-<p><a href="https://github.com/sanshiwu/study-examples">study-examples</a></p>
+<p><a href="https://github.com/sanshiwu/study">study-examples</a></p>
 </div>
 <div class="paragraph">
 <p>Suppose our root directory is: <code>F:</code></p>
@@ -4936,7 +4936,7 @@ It calls for listing modifiers in the following order:</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>git clone <a href="https://github.com/sanshiwu/study-examples" class="bare">https://github.com/sanshiwu/study-examples</a></p>
+<p>git clone <a href="https://github.com/sanshiwu/study.git" class="bare">https://github.com/sanshiwu/study.git</a></p>
 </li>
 </ol>
 </div>
@@ -4956,7 +4956,7 @@ It calls for listing modifiers in the following order:</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>git clone <a href="https://github.com/sanshiwu/study-juli" class="bare">https://github.com/sanshiwu/study-juli</a></p>
+<p>git clone <a href="https://github.com/sanshiwu/study.git" class="bare">https://github.com/sanshiwu/study.git</a></p>
 </li>
 </ol>
 </div>
@@ -4979,6 +4979,15 @@ It calls for listing modifiers in the following order:</p>
 </div>
 <div class="sect2">
 <h3 id="_run_the_example">8.3. Run the example</h3>
+<div class="paragraph">
+<p>需要设置系统参数:</p>
+</div>
+<div class="paragraph">
+<p>-Djava.util.logging.manager</p>
+</div>
+<div class="paragraph">
+<p>-Djava.util.logging.config.file</p>
+</div>
 <div class="sect3">
 <h4 id="_the_first_way">8.3.1. The first way:</h4>
 <div class="olist arabic">
@@ -5057,15 +5066,131 @@ It calls for listing modifiers in the following order:</p>
 </table>
 </div>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_whats_next">8.4. What’s next</h3>
+<div class="sect3">
+<h4 id="_some_test_cases">8.3.3. Some test cases</h4>
 <div class="ulist">
 <ul>
 <li>
-<p>How to develop a SPI implementation.</p>
+<p>JULI</p>
 </li>
 </ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">  使用JDK logging
+  java -classpath "./lib/*;./examples/study-juli-examples/*;" org.study.juli.examples.example.Examples</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">  使用juli
+  java -D"java.util.logging.manager"="org.study.juli.logging.manager.StudyJuliLogManager" -D"java.util.logging.config.file"="./conf/logging.properties" -classpath "./lib/*;./examples/study-juli-examples/*;" org.study.juli.examples.example.Examples</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">  使用juli增加探针:
+  java -D"info"="false" -D"generateClass"="false" -D"packageName"="org.study"  -D"java.util.logging.manager"="org.study.juli.logging.manager.StudyJuliLogManager" -D"java.util.logging.config.file"="./conf/logging.properties" -javaagent:"./lib/study-agent-2020.jar" -classpath "./lib/*;./examples/study-juli-examples/*;G:\maven3.6.3\repository\org\javassist\javassist\3.22.0-GA\javassist-3.22.0-GA.jar;" org.study.juli.examples.example.Examples</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">  打开安全管理器
+  java -D"java.security.manager" -D"study.home"="." -D"java.security.policy"="./conf/juli.policy" -D"java.util.logging.manager"="org.study.juli.logging.manager.StudyJuliLogManager" -D"java.util.logging.config.file"="./conf/logging.properties" -classpath "./lib/*;./examples/study-juli-examples/*;" org.study.juli.examples.example.Examples
+  java -D"java.security.manager" -D"study.home"="." -D"java.security.policy"="./conf/juli.policy" -D"java.util.logging.manager"="org.study.juli.logging.manager.StudyJuliLogManager" -D"java.util.logging.config.file"="./conf/logging.properties" -classpath "./lib/study-juli-2020.jar;./examples/study-juli-examples/*;" org.study.juli.examples.example.Examples</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>LOG4J2</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">  使用JDK logging
+  java -classpath "./lib/*;./examples/study-juli-spi-examples/*;" org.study.juli.spi.examples.example.Examples</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">  使用log4j2
+  java -D"log4j2.configurationFile"="./conf/log4j2.properties" -D"Log4jContextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector" -classpath "./lib/*;./examples/study-juli-spi-examples/*;" org.study.juli.spi.examples.example.Examples</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">  使用log4j2增加探针:
+  java  -D"info"="false" -D"generateClass"="false" -D"packageName"="org.study"  -D"log4j2.configurationFile"="./conf/log4j2.properties" -D"Log4jContextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector"  -javaagent:"./lib/study-agent-2020.jar" -classpath "./lib/*;./examples/study-juli-spi-examples/*;G:\maven3.6.3\repository\org\javassist\javassist\3.22.0-GA\javassist-3.22.0-GA.jar;" org.study.juli.spi.examples.example.Examples</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">  打开安全管理器
+  java  -D"java.security.manager" -D"study.home"="." -D"java.security.policy"="./conf/juli-spi.policy"  -D"log4j2.configurationFile"="./conf/log4j2.properties" -D"Log4jContextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector" -classpath "./lib/*;./examples/study-juli-spi-examples/*;" org.study.juli.spi.examples.example.Examples</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>DEBUG</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">  -agentlib:jdwp=transport=dt_socket,address=127.0.0.1:2781,suspend=n,server=y
+  transport=dt_socket 选择dt_socket协议.
+  server=y y表示启动的JVM是服务器端.如果为n,则表示启动的JVM是客户端.
+  suspend=n y表示启动的JVM会等待客户端连接.
+  address=2781 指定给客户端使用的端口.</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>没有修复的Sonar提示.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">  java:S2148
+  java:S1451
+  java:S1148
+  java:S1774
+  java:S1312
+  java:S4174
+  java:S112
+  java:S923
+  java:S134
+  java:S1108
+  java:S1106
+  java:S2658
+  java:S1309
+  java:S1450
+  java:S1699
+  java:S2093
+  java:S3776
+  java:S1148</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>jconsole和jmc连接到jvm时需要下面的系统参数设置,否则无法连接.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="java" class="language-java hljs">  #-Dcom.sun.management.jmxremote
+  #-D"com.sun.management.jmxremote.port"="8011"
+  #-D"com.sun.management.jmxremote.ssl"="false"
+  #-D"com.sun.management.jmxremote.authenticate"="false"</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -5108,7 +5233,7 @@ Create the log configuration file of SPI interface custom implementation class i
 <pre class="highlightjs highlight"><code data-lang="properties" class="language-properties hljs">  #参考文档:http://logging.apache.org/log4j/2.x/manual/appenders.html
   # -DLog4jContextSelector=org.apache.logging.log4j.core.async.AsyncLoggerContextSelector
   #自定义插件的包.
-  packages=org.study.juli.examples.plugin
+  packages=org.study.juli.spi.examples.plugin
   #log4j 日志的级别(自身).
   stratus=error,info
   #每隔30s重新读取一次log4j配置文件.
@@ -5818,7 +5943,7 @@ study指"学习,研究",强调学习的过程,指深入系统地学习,带有努
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-03-19 21:28:27 +0800
+Last updated 2021-03-20 18:53:16 +0800
 </div>
 </div>
 <link rel="stylesheet" href="../resources/highlight/styles/highlight.min.css">
