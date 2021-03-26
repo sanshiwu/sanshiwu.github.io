@@ -4140,19 +4140,20 @@ section.hero .hero-main .hero-right {
 </li>
 <li><a href="#_faq">13. FAQ</a>
 <ul class="sectlevel2">
-<li><a href="#_motivation">13.1. Motivation</a></li>
-<li><a href="#_design_principles">13.2. Design Principles</a></li>
-<li><a href="#_whos_using_this_and_why">13.3. Who’s using this and why?</a></li>
-<li><a href="#_which_license_is_juli_under">13.4. Which license is Juli under?</a></li>
-<li><a href="#_how_can_i_contribute">13.5. How can I contribute?</a></li>
-<li><a href="#_what_is_the_road_map">13.6. What is the road map?</a></li>
-<li><a href="#_what_is_the_juli_versioning_policy">13.7. What is the Juli versioning policy?</a></li>
-<li><a href="#_how_long_are_juli_releases_supported_for">13.8. How long are Juli releases supported for?</a></li>
-<li><a href="#_can_i_use_juli_with_my_favorite_data_format_json_xml">13.9. Can I use Juli with my favorite data format (JSON, XML)?</a></li>
-<li><a href="#_can_i_use_juli_on_our_companys_projects">13.10. Can I use Juli on our company&#8217;s projects?</a></li>
-<li><a href="#_how_do_you_pronounce_juli">13.11. How do you pronounce Juli?</a>
+<li><a href="#_flow_control_and_backpressure">13.1. Flow control and backpressure.</a></li>
+<li><a href="#_motivation">13.2. Motivation</a></li>
+<li><a href="#_design_principles">13.3. Design Principles</a></li>
+<li><a href="#_whos_using_this_and_why">13.4. Who’s using this and why?</a></li>
+<li><a href="#_which_license_is_juli_under">13.5. Which license is Juli under?</a></li>
+<li><a href="#_how_can_i_contribute">13.6. How can I contribute?</a></li>
+<li><a href="#_what_is_the_road_map">13.7. What is the road map?</a></li>
+<li><a href="#_what_is_the_juli_versioning_policy">13.8. What is the Juli versioning policy?</a></li>
+<li><a href="#_how_long_are_juli_releases_supported_for">13.9. How long are Juli releases supported for?</a></li>
+<li><a href="#_can_i_use_juli_with_my_favorite_data_format_json_xml">13.10. Can I use Juli with my favorite data format (JSON, XML)?</a></li>
+<li><a href="#_can_i_use_juli_on_our_companys_projects">13.11. Can I use Juli on our company&#8217;s projects?</a></li>
+<li><a href="#_how_do_you_pronounce_juli">13.12. How do you pronounce Juli?</a>
 <ul class="sectlevel3">
-<li><a href="#_why_is_it_called_study_juli">13.11.1. Why is it called <code>Study</code> <code>Juli</code>?</a></li>
+<li><a href="#_why_is_it_called_study_juli">13.12.1. Why is it called <code>Study</code> <code>Juli</code>?</a></li>
 </ul>
 </li>
 </ul>
@@ -4190,8 +4191,10 @@ section.hero .hero-main .hero-right {
 <p>Custom log message format.</p>
 </li>
 <li>
-<p>More refined processing log.
-For example, Handler condition,Custom filter.</p>
+<p>Thread pool queue rejection policies back pressure mechanism.</p>
+</li>
+<li>
+<p>More refined processing log. For example, Handler condition,Custom filter.</p>
 </li>
 <li>
 <p>Batch.</p>
@@ -4236,6 +4239,22 @@ For example, Handler condition,Custom filter.</p>
 </li>
 <li>
 <p>Other features coming soon&#8230;&#8203;</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Unique message id in same thread.</p>
+</li>
+<li>
+<p>Back pressure control based on high and low water mark.</p>
+</li>
+<li>
+<p>Back pressure control based on read and write stream.</p>
+</li>
+<li>
+<p>&#8230;&#8203;</p>
+</li>
+</ol>
+</div>
 </li>
 </ul>
 </div>
@@ -4749,7 +4768,7 @@ It calls for listing modifiers in the following order:</p>
     1example5.org.study.juli.logging.handler.FileHandler
   #全局的处理器,不用配置前缀,会打开一个全局的日志文件.给没有配置(单个类,单个包的处理器)的所有类使用.
   # 非测试环境不要配置: java.util.logging.ConsoleHandler 处理器,很影响输出效率.
-  .handlers=org.study.juli.logging.handler.FileHandler
+  .handlers=org.study.juli.logging.handler.FileHandlerV2
   .level=ALL
   #自定义处理器1.
   # 为单个处理器配置日志级别.
@@ -4807,6 +4826,11 @@ It calls for listing modifiers in the following order:</p>
   org.study.juli.logging.handler.FileHandler.level=ALL
   org.study.juli.logging.handler.FileHandler.formatter=org.study.juli.logging.formatter.StudyJuliMessageJsonFormatter
   org.study.juli.logging.handler.FileHandler.encoding=UTF-8
+
+  org.study.juli.logging.handler.FileHandlerV2.level=ALL
+  org.study.juli.logging.handler.FileHandlerV2.formatter=org.study.juli.logging.formatter.StudyJuliMessageJsonFormatter
+  org.study.juli.logging.handler.FileHandlerV2.encoding=UTF-8
+
   #--所有处理器全部初始化完毕后使用以下属性配置Logger.
   # 日志级别(包).
   org.study.juli.examples.example.level=ALL
@@ -5686,10 +5710,13 @@ Create the log configuration file of SPI interface custom implementation class i
 <div class="sect2">
 <h3 id="_infrastructure">12.2. Infrastructure</h3>
 <div class="paragraph">
-<p>All test instances are 4-core, 4-thread, 2gb memory and 256gb Samsung SSD hard systems.</p>
+<p>All test instances are Windows 10(64) Intel i5-4590 CPU @ 3.30Ghz, 1 physical core 4-Vcore, 4-thread, 2gb memory and 256gb Samsung SSD hard systems.</p>
 </div>
 <div class="paragraph">
 <p>In the case of large amount of data: Resource consumption is twice as much as log4j2, or even more.</p>
+</div>
+<div class="paragraph">
+<p>Max heap memory(Submitted): 800MB,then it stabilized.</p>
 </div>
 <div class="paragraph">
 <p>Memory peak: 400MB, Avg 200MB</p>
@@ -5711,7 +5738,7 @@ Otherwise, the CPU peak may be 80% or more.
 </table>
 </div>
 <div class="paragraph">
-<p>IO writes peak: 90MB per second, Avg 85MB.</p>
+<p>IO writes peak: 90MB per second, Avg 85MB, Max 100MB, this depends on disk IO performance.</p>
 </div>
 <div class="paragraph">
 <p>Write speed peak: infinite.</p>
@@ -5757,14 +5784,38 @@ If you use multiple hard disks, writing will be faster.
 Hope you find your answer here :-)</p>
 </div>
 <div class="sect2">
-<h3 id="_motivation">13.1. Motivation</h3>
+<h3 id="_flow_control_and_backpressure">13.1. Flow control and backpressure.</h3>
+<div class="paragraph">
+<p>Q:So far, what&#8217;s Juli&#8217;s back pressure mechanism?</p>
+</div>
+<div class="paragraph">
+<p>A:Thread pool queue rejection policies.</p>
+</div>
+<div class="paragraph">
+<p><code>ThreadPoolExecutor.CallerRunsPolicy()</code></p>
+</div>
+<div class="paragraph">
+<p>This is not an elegant solution. But it&#8217;s very useful.</p>
+</div>
+<div class="paragraph">
+<p>The only drawback is: The downstream threads block upstream threads and use them to execute tasks(Block upstream Thread).This will cause the upstream thread life cycle to end ahead of time, and the internal data of the thread will change, such as the internal variables of the thread.</p>
+</div>
+<div class="paragraph">
+<p>It can solve the thread pool task back pressure.</p>
+</div>
+<div class="paragraph">
+<p>In the future,We will consider the scheme of back pressure mechanism based on the number of entries and the size of bytes in the time window.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_motivation">13.2. Motivation</h3>
 <div class="paragraph">
 <p>Need a simple, lightweight log library.
 Does not rely on any third party library.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_design_principles">13.2. Design Principles</h3>
+<h3 id="_design_principles">13.3. Design Principles</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -5789,26 +5840,26 @@ Does not rely on any third party library.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_whos_using_this_and_why">13.3. Who’s using this and why?</h3>
+<h3 id="_whos_using_this_and_why">13.4. Who’s using this and why?</h3>
 <div class="paragraph">
 <p>Any beginner who wants to know how the logging framework works</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_which_license_is_juli_under">13.4. Which license is Juli under?</h3>
+<h3 id="_which_license_is_juli_under">13.5. Which license is Juli under?</h3>
 <div class="paragraph">
 <p>All implementations are licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_how_can_i_contribute">13.5. How can I contribute?</h3>
+<h3 id="_how_can_i_contribute">13.6. How can I contribute?</h3>
 <div class="paragraph">
 <p>Contributors are highly welcome.
 The repositories are hosted on GitHub.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_what_is_the_road_map">13.6. What is the road map?</h3>
+<h3 id="_what_is_the_road_map">13.7. What is the road map?</h3>
 <div class="paragraph">
 <p>Later continue to optimize:</p>
 </div>
@@ -5828,25 +5879,25 @@ Currently, only UTC is supported.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_what_is_the_juli_versioning_policy">13.7. What is the Juli versioning policy?</h3>
+<h3 id="_what_is_the_juli_versioning_policy">13.8. What is the Juli versioning policy?</h3>
 <div class="paragraph">
 <p>Version policy uses JEP322</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_how_long_are_juli_releases_supported_for">13.8. How long are Juli releases supported for?</h3>
+<h3 id="_how_long_are_juli_releases_supported_for">13.9. How long are Juli releases supported for?</h3>
 <div class="paragraph">
 <p>According to JEP322.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_can_i_use_juli_with_my_favorite_data_format_json_xml">13.9. Can I use Juli with my favorite data format (JSON, XML)?</h3>
+<h3 id="_can_i_use_juli_with_my_favorite_data_format_json_xml">13.10. Can I use Juli with my favorite data format (JSON, XML)?</h3>
 <div class="paragraph">
 <p>No,But it&#8217;s not far away(The JSON format of log4j2 is provided by default).</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_can_i_use_juli_on_our_companys_projects">13.10. Can I use Juli on our company&#8217;s projects?</h3>
+<h3 id="_can_i_use_juli_on_our_companys_projects">13.11. Can I use Juli on our company&#8217;s projects?</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -5886,14 +5937,14 @@ It is not recommended to use in commercial environment, and there is no guarante
 </div>
 </div>
 <div class="sect2">
-<h3 id="_how_do_you_pronounce_juli">13.11. How do you pronounce Juli?</h3>
+<h3 id="_how_do_you_pronounce_juli">13.12. How do you pronounce Juli?</h3>
 <div class="paragraph">
 <p>You can call it <code>Julie</code> or <code>朱莉</code>.
 You can also call it <code>cohesion</code> or <code>聚力</code>.
 Because there is no release, the name is just a name, and it doesn&#8217;t make sense.</p>
 </div>
 <div class="sect3">
-<h4 id="_why_is_it_called_study_juli">13.11.1. Why is it called <code>Study</code> <code>Juli</code>?</h4>
+<h4 id="_why_is_it_called_study_juli">13.12.1. Why is it called <code>Study</code> <code>Juli</code>?</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -5943,7 +5994,7 @@ study指"学习,研究",强调学习的过程,指深入系统地学习,带有努
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-03-20 18:53:16 +0800
+Last updated 2021-03-26 19:48:15 +0800
 </div>
 </div>
 <link rel="stylesheet" href="../resources/highlight/styles/highlight.min.css">
